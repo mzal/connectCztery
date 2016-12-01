@@ -4,7 +4,7 @@ from random import *
 FLAT_UI_COLORS = [[color_rgb(26, 188, 156), color_rgb(46, 204, 113), color_rgb(52, 152, 219), color_rgb(155, 89, 182)],
                     [color_rgb(241, 196, 15), color_rgb(230, 126, 34), color_rgb(231, 76, 60), color_rgb(189, 195, 199)]]
 WIN_TITLE = "ConnectCztery"
-COL = 7
+COL = 10
 ROW = 6
 WIN_X = 700
 WIN_Y = 700 * ROW/COL
