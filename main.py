@@ -3,7 +3,7 @@ from random import *
 
 
 WIN_TITLE = "ConnectCztery"
-COL = 10
+COL = 7
 ROW = 6
 WIN_X = 700
 WIN_Y = 700 * ROW/COL
