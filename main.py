@@ -1,3 +1,5 @@
+#!/bin/python3
+
 from graphics import *
 from random import *
 
@@ -50,7 +52,7 @@ def main():
     draw_grid(win)
     while True:
         move = int(win.getKey()) - 1
-        while filled[move] == ROW:
+        while move >= COL or filled[move] == ROW:
             move = int(win.getKey()) - 1
         draw_circle(win, board, filled, move, 1)
         move = randint(0,COL-1)
