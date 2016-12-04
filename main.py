@@ -39,7 +39,7 @@ def draw_circle(win, board, filled, col_num, player,sim=False):
     return (board,filled)
 
 def AImove(win,board,filled):
-    maks=-1000000001
+    maks=-9000000001
     best=0
     for i in range(COL):
         if(filled[i]==ROW):
@@ -48,7 +48,7 @@ def AImove(win,board,filled):
         mini=1000000001
         if(win_check(ev[0])==0):
             for j in range(COL):
-                if(ev[1][i]==ROW):
+                if(ev[1][j]==ROW):
                     continue
                 ev2=draw_circle(win,ev[0],ev[1],j,1,sim=True)
                 mini=min((mini,evaluate(ev2[0])))
