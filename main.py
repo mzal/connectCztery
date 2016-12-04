@@ -129,6 +129,5 @@ def main():
     t.setSize(30)
     t.setTextColor("blue")
     t.draw(win)
-    
-
+    win.getKey()
 main()
