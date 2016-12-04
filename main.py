@@ -8,6 +8,7 @@ ROW = 6
 WIN_X = 700
 WIN_Y = 700 * ROW/COL
 RADIUS = 3/4 * WIN_X / (2*COL)
+background_color = "white"
 TL = 4
 #TL = Target Length
 
@@ -65,6 +66,7 @@ def win_check(board):
     return 0
 
 def draw_grid(win):
+    win.setBackground(background_color)
     for i in range(1,COL):
         l = Line( Point(i*WIN_X/COL, 0), Point(i*WIN_X/COL, WIN_Y) )
         l.draw(win)
