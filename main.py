@@ -80,15 +80,16 @@ def main():
     for i in range(int(COL*ROW/2)):
         #Player 1
         move = int(win.getKey()) - 1
-        while move < 0 or move >= COL or filled[move] == ROW:
-            move = int(win.getKey()) - 1
-        draw_circle(win, board, filled, move, 1)
-        winner = win_check(board)
-        game_history.append(board)
-        if(debug):
-            print(board)
-        if(winner!=0):
-            break
+        if(move!=-1):
+            while move < 0 or move >= COL or filled[move] == ROW:
+                move = int(win.getKey()) - 1
+            draw_circle(win, board, filled, move, 1)
+            winner = win_check(board)
+            game_history.append(board)
+            if(debug):
+                print(board)
+            if(winner!=0):
+                break
         #Player 2
         move = AImove(win,board,filled)
         draw_circle(win, board, filled, move, 2)
