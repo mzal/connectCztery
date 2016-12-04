@@ -74,7 +74,14 @@ def draw_grid(win):
         l = Line( Point(0, i*WIN_Y/ROW), Point(WIN_X, i*WIN_Y/ROW) )
         l.draw(win)
 
-def draw_circle(win, board, filled, col_num, player):
+def draw_circle(win, board, filled, col_num, player,sim=False):
+    if(sim):
+        t_board=board
+        t_filled=filled
+        row_num=filled[col_num]
+        t_board[col_num][ROW-row_num-1]=player
+        t_filled[col_num]+=1
+        return (t_board,t_filled)
     row_num = filled[col_num]
     board[col_num][ROW - row_num - 1] = player
     filled[col_num] += 1
@@ -86,6 +93,7 @@ def draw_circle(win, board, filled, col_num, player):
         c.setFill("red")
         c.setOutline("red")
     c.draw(win)
+    return (board,filled)
 
 def main():
     win = GraphWin(WIN_TITLE, WIN_X, WIN_Y)
