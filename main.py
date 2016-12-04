@@ -1,5 +1,6 @@
 from graphics import *
 from random import *
+import copy
 
 
 WIN_TITLE = "ConnectCztery"
@@ -10,6 +11,7 @@ WIN_Y = 700 * ROW/COL
 RADIUS = 3/4 * WIN_X / (2*COL)
 background_color = "white"
 TL = 4
+debug = True
 #TL = Target Length
 
 def win_check(board):
@@ -85,6 +87,8 @@ def evaluate(board):
                     b+=1
             if(a==0):
                 points+=b
+            if(b==0):
+                points-=a
     for i in range(COL-TL+1):
         for j in range(ROW):
             a = 0
@@ -96,6 +100,8 @@ def evaluate(board):
                     b+=1
             if(a==0):
                 points+=b
+            if(b==0):
+                points-=a
     for i in range(COL-TL+1):
         for j in range(ROW-TL+1):
             a = 0
@@ -107,6 +113,8 @@ def evaluate(board):
                     b+=1
             if(a==0):
                 points+=b
+            if(b==0):
+                points-=a
             a = 0
             b = 0
             for k in range(TL):
@@ -116,6 +124,8 @@ def evaluate(board):
                     b+=1
             if(a==0):
                 points+=b
+            if(b==0):
+                points-=a
     return points
 
 def draw_grid(win):
@@ -129,8 +139,10 @@ def draw_grid(win):
 
 def draw_circle(win, board, filled, col_num, player,sim=False):
     if(sim):
-        t_board=board
-        t_filled=filled
+        t_board=[]
+        for i in range(COL):
+            t_board.append(list(board[i]))
+        t_filled=copy.copy(filled)
         row_num=filled[col_num]
         t_board[col_num][ROW-row_num-1]=player
         t_filled[col_num]+=1
@@ -147,6 +159,22 @@ def draw_circle(win, board, filled, col_num, player,sim=False):
         c.setOutline("red")
     c.draw(win)
     return (board,filled)
+    
+def AImove(win,board,filled):
+    maks=-1000000001
+    best=0
+    for i in range(COL):
+        if(filled[i]==ROW):
+            continue
+        ev=draw_circle(win,board,filled,i,2,sim=True)
+        points=evaluate(ev[0])
+        if(points>maks):
+            best=i
+            maks=points
+    if(debug):
+        print("Value of move "+str(best)+" is "+str(points))
+    return best
+    
 
 def main():
     win = GraphWin(WIN_TITLE, WIN_X, WIN_Y)
@@ -164,7 +192,7 @@ def main():
     draw_grid(win)
     winner = 0
     game_history.append(board)
-    for i in range(COL*ROW/2):
+    for i in range(int(COL*ROW/2)):
         #Player 1
         move = int(win.getKey()) - 1
         while filled[move] == ROW:
@@ -172,15 +200,17 @@ def main():
         draw_circle(win, board, filled, move, 1)
         winner = win_check(board)
         game_history.append(board)
+        if(debug):
+            print(board)
         if(winner!=0):
             break
         #Player 2
-        move = randint(0,COL-1)
-        while filled[move] == ROW:
-            move = randint(0,COL-1)
+        move = AImove(win,board,filled)
         draw_circle(win, board, filled, move, 2)
         winner = win_check(board)
         game_history.append(board)
+        if(debug):
+            print(board)
         if(winner!=0):
             break
     if(winner==1):
