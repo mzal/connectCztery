@@ -1,6 +1,3 @@
-#!/bin/python3
-
-
 from graphics import *
 from random import *
 
