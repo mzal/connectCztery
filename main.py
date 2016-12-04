@@ -65,6 +65,59 @@ def win_check(board):
                 return 2
     return 0
 
+#evaluates the board
+def evaluate(board):
+    points = 0
+    if(win_check(board)==2):
+        points=1000000000
+        return points
+    if(win_check(board)==1):
+        points=-1000000000
+        return points
+    for i in range(COL):
+        for j in range(ROW-TL+1):
+            a = 0
+            b = 0
+            for k in range(TL):
+                if(board[i][j+k]==1):
+                    a+=1
+                if(board[i][j+k]==2):
+                    b+=1
+            if(a==0):
+                points+=b
+    for i in range(COL-TL+1):
+        for j in range(ROW):
+            a = 0
+            b = 0
+            for k in range(TL):
+                if(board[i+k][j]==1):
+                    a+=1
+                if(board[i+k][j]==2):
+                    b+=1
+            if(a==0):
+                points+=b
+    for i in range(COL-TL+1):
+        for j in range(ROW-TL+1):
+            a = 0
+            b = 0
+            for k in range(TL):
+                if(board[i+k][j+k]==1):
+                    a+=1
+                if(board[i+k][j+k]==2):
+                    b+=1
+            if(a==0):
+                points+=b
+            a = 0
+            b = 0
+            for k in range(TL):
+                if(board[i+TL-k-1][j+k]==1):
+                    a+=1
+                if(board[i+TL-k-1][j+k]==2):
+                    b+=1
+            if(a==0):
+                points+=b
+    return points
+
 def draw_grid(win):
     win.setBackground(background_color)
     for i in range(1,COL):
@@ -111,10 +164,10 @@ def main():
     draw_grid(win)
     winner = 0
     game_history.append(board)
-    for i in range(COL*ROW):
+    for i in range(COL*ROW/2):
         #Player 1
         move = int(win.getKey()) - 1
-        while move >= COL or filled[move] == ROW:
+        while filled[move] == ROW:
             move = int(win.getKey()) - 1
         draw_circle(win, board, filled, move, 1)
         winner = win_check(board)
