@@ -1,3 +1,6 @@
+#!/bin/python3
+
+
 from graphics import *
 from random import *
 
@@ -114,7 +117,7 @@ def main():
     for i in range(COL*ROW):
         #Player 1
         move = int(win.getKey()) - 1
-        while filled[move] == ROW:
+        while move >= COL or filled[move] == ROW:
             move = int(win.getKey()) - 1
         draw_circle(win, board, filled, move, 1)
         winner = win_check(board)
