@@ -37,7 +37,7 @@ def draw_circle(win, board, filled, col_num, player,sim=False):
         c.setOutline("red")
     c.draw(win)
     return (board,filled)
-    
+
 def AImove(win,board,filled):
     maks=-1000000001
     best=0
@@ -59,7 +59,7 @@ def AImove(win,board,filled):
     if(debug):
         print("Value of move "+str(best)+" is "+str(points))
     return best
-    
+
 
 def main():
     win = GraphWin(WIN_TITLE, WIN_X, WIN_Y)
@@ -80,7 +80,7 @@ def main():
     for i in range(int(COL*ROW/2)):
         #Player 1
         move = int(win.getKey()) - 1
-        while filled[move] == ROW:
+        while move < 1 or move >= COL or filled[move] == ROW:
             move = int(win.getKey()) - 1
         draw_circle(win, board, filled, move, 1)
         winner = win_check(board)
