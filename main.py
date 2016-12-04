@@ -1,6 +1,10 @@
 from graphics import *
 from random import *
+from evaluate import *
+from static_values import *
+from win_check import *
 import copy
+
 
 
 WIN_TITLE = "ConnectCztery"
@@ -13,120 +17,6 @@ background_color = "white"
 TL = 4
 debug = True
 #TL = Target Length
-
-def win_check(board):
-    for i in range(COL):
-        for j in range(ROW-TL+1):
-            a = 0
-            b = 0
-            for k in range(TL):
-                if(board[i][j+k]==1):
-                    a+=1
-                if(board[i][j+k]==2):
-                    b+=1
-            if(a==TL):
-                return 1
-            if(b==TL):
-                return 2
-    for i in range(COL-TL+1):
-        for j in range(ROW):
-            a = 0
-            b = 0
-            for k in range(TL):
-                if(board[i+k][j]==1):
-                    a+=1
-                if(board[i+k][j]==2):
-                    b+=1
-            if(a==TL):
-                return 1
-            if(b==TL):
-                return 2
-    for i in range(COL-TL+1):
-        for j in range(ROW-TL+1):
-            a = 0
-            b = 0
-            for k in range(TL):
-                if(board[i+k][j+k]==1):
-                    a+=1
-                if(board[i+k][j+k]==2):
-                    b+=1
-            if(a==TL):
-                return 1
-            if(b==TL):
-                return 2
-            a = 0
-            b = 0
-            for k in range(TL):
-                if(board[i+TL-k-1][j+k]==1):
-                    a+=1
-                if(board[i+TL-k-1][j+k]==2):
-                    b+=1
-            if(a==TL):
-                return 1
-            if(b==TL):
-                return 2
-    return 0
-
-#evaluates the board
-def evaluate(board):
-    points = 0
-    if(win_check(board)==2):
-        points=1000000000
-        return points
-    if(win_check(board)==1):
-        points=-1000000000
-        return points
-    for i in range(COL):
-        for j in range(ROW-TL+1):
-            a = 0
-            b = 0
-            for k in range(TL):
-                if(board[i][j+k]==1):
-                    a+=1
-                if(board[i][j+k]==2):
-                    b+=1
-            if(a==0):
-                points+=b
-            if(b==0):
-                points-=a
-    for i in range(COL-TL+1):
-        for j in range(ROW):
-            a = 0
-            b = 0
-            for k in range(TL):
-                if(board[i+k][j]==1):
-                    a+=1
-                if(board[i+k][j]==2):
-                    b+=1
-            if(a==0):
-                points+=b
-            if(b==0):
-                points-=a
-    for i in range(COL-TL+1):
-        for j in range(ROW-TL+1):
-            a = 0
-            b = 0
-            for k in range(TL):
-                if(board[i+k][j+k]==1):
-                    a+=1
-                if(board[i+k][j+k]==2):
-                    b+=1
-            if(a==0):
-                points+=b
-            if(b==0):
-                points-=a
-            a = 0
-            b = 0
-            for k in range(TL):
-                if(board[i+TL-k-1][j+k]==1):
-                    a+=1
-                if(board[i+TL-k-1][j+k]==2):
-                    b+=1
-            if(a==0):
-                points+=b
-            if(b==0):
-                points-=a
-    return points
 
 def draw_grid(win):
     win.setBackground(background_color)
@@ -168,11 +58,12 @@ def AImove(win,board,filled):
             continue
         ev=draw_circle(win,board,filled,i,2,sim=True)
         mini=1000000001
-        for j in range(COL):
-            if(ev[1][i]==ROW):
-                continue
-            ev2=draw_circle(win,ev[0],ev[1],j,1,sim=True)
-            mini=min((mini,evaluate(ev2[0])))
+        if(win_check(ev[0])==0):
+            for j in range(COL):
+                if(ev[1][i]==ROW):
+                    continue
+                ev2=draw_circle(win,ev[0],ev[1],j,1,sim=True)
+                mini=min((mini,evaluate(ev2[0])))
         points=mini
         if(points>maks):
             best=i
