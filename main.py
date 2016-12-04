@@ -167,7 +167,13 @@ def AImove(win,board,filled):
         if(filled[i]==ROW):
             continue
         ev=draw_circle(win,board,filled,i,2,sim=True)
-        points=evaluate(ev[0])
+        mini=1000000001
+        for j in range(COL):
+            if(ev[1][i]==ROW):
+                continue
+            ev2=draw_circle(win,ev[0],ev[1],j,1,sim=True)
+            mini=min((mini,evaluate(ev2[0])))
+        points=mini
         if(points>maks):
             best=i
             maks=points
