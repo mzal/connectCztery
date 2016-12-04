@@ -80,7 +80,7 @@ def main():
     for i in range(int(COL*ROW/2)):
         #Player 1
         move = int(win.getKey()) - 1
-        while move < 1 or move >= COL or filled[move] == ROW:
+        while move < 0 or move >= COL or filled[move] == ROW:
             move = int(win.getKey()) - 1
         draw_circle(win, board, filled, move, 1)
         winner = win_check(board)
