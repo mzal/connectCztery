@@ -57,7 +57,7 @@ def AImove(win,board,filled):
             best=i
             maks=points
     if(debug):
-        print("Value of move "+str(best)+" is "+str(points))
+        print("Value of move "+str(best)+" is "+str(maks))
     return best
 
 
