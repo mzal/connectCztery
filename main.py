@@ -9,11 +9,16 @@ import copy
 def draw_grid(win):
     win.setBackground(background_color)
     for i in range(1,COL):
-        l = Line( Point(i*WIN_X/COL, 0), Point(i*WIN_X/COL, WIN_Y) )
+        l = Line( Point(i*(WIN_X)/COL,0), Point(i*(WIN_X)/COL, WIN_Y))
         l.draw(win)
-    for i in range(1,ROW):
-        l = Line( Point(0, i*WIN_Y/ROW), Point(WIN_X, i*WIN_Y/ROW) )
+    for i in range(1,ROW+1):
+        l = Line( Point(0, i*(WIN_Y-BASE)/ROW), Point(WIN_X, i*(WIN_Y-BASE)/ROW) )
         l.draw(win)
+    for i in range(1,COL+1):
+        u=Text(Point(i*WIN_X/COL - WIN_X/(2*COL), WIN_Y-BASE/2),str(i))
+        u.setSize(11)
+        u.setTextColor("blue")
+        u.draw(win)
 
 def draw_circle(win, board, filled, col_num, player,sim=False):
     if(sim):
@@ -28,7 +33,7 @@ def draw_circle(win, board, filled, col_num, player,sim=False):
     row_num = filled[col_num]
     board[col_num][ROW - row_num - 1] = player
     filled[col_num] += 1
-    c = Circle( Point(WIN_X/(2*COL) + col_num*WIN_X/COL, WIN_Y/(2*ROW) + (ROW - row_num - 1)*WIN_Y/ROW), RADIUS )
+    c = Circle( Point(WIN_X/(2*COL) + col_num*WIN_X/COL, (WIN_Y-BASE)/(2*ROW) + (ROW - row_num - 1)*(WIN_Y-BASE)/ROW), RADIUS )
     if (player == 1):
         c.setFill("yellow")
         c.setOutline("yellow")
