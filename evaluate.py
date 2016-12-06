@@ -1,63 +1,72 @@
 from win_check import *
 
-v = [0,1,5,20]
+v = [0,1,5,20,1000000000]
 
 def evaluate(board):
+    win=win_check(board)
+    if(win==2):
+        return 9000000000
+    if(win==1):
+        return -9000000000
     points = 0
-    if(win_check(board)==2):
-        points=1000000000
-        return points
-    if(win_check(board)==1):
-        points=-1000000000
-        return points
     for i in range(COL):
-        for j in range(ROW-TL+1):
-            a = 0
-            b = 0
-            for k in range(TL):
-                if(board[i][j+k]==1):
-                    a+=1
-                if(board[i][j+k]==2):
-                    b+=1
-            if(a==0):
-                points+=v[b]
-            if(b==0):
-                points-=v[a]
-    for i in range(COL-TL+1):
         for j in range(ROW):
-            a = 0
-            b = 0
-            for k in range(TL):
-                if(board[i+k][j]==1):
-                    a+=1
-                if(board[i+k][j]==2):
-                    b+=1
-            if(a==0):
-                points+=v[b]
-            if(b==0):
-                points-=v[a]
-    for i in range(COL-TL+1):
-        for j in range(ROW-TL+1):
-            a = 0
-            b = 0
-            for k in range(TL):
-                if(board[i+k][j+k]==1):
-                    a+=1
-                if(board[i+k][j+k]==2):
-                    b+=1
-            if(a==0):
-                points+=v[b]
-            if(b==0):
-                points-=v[a]
-            a = 0
-            b = 0
-            for k in range(TL):
-                if(board[i+TL-k-1][j+k]==1):
-                    a+=1
-                if(board[i+TL-k-1][j+k]==2):
-                    b+=1
-            if(a==0):
-                points+=v[b]
-            if(b==0):
-                points-=v[a]
+            if(board[i][j]!=0):
+                continue
+            maks=0
+            mini=0
+            xdf=min((TL-1,i))
+            xdl=max((0,i-COL+TL))
+            ydf=min((TL-1,j))
+            ydl=max((0,j-ROW+TL))
+            for k in range(xdf,xdl-1,-1):
+                a=0
+                b=0
+                for l in range(TL):
+                    if(board[i-k+l][j]==1):
+                        a+=1
+                    if(board[i-k+l][j]==2):
+                        b+=1
+                if(a==0):
+                    maks=max((maks,v[b]))
+                if(b==0):
+                    mini=max((mini,v[a]))
+            for k in range(ydf,ydl-1,-1):
+                a=0
+                b=0
+                for l in range(TL):
+                    if(board[i][j-k+l]==1):
+                        a+=1
+                    if(board[i][j-k+l]==2):
+                        b+=1
+                if(a==0):
+                    maks=max((maks,v[b]))
+                if(b==0):
+                    mini=max((mini,v[a]))
+            for k in range(min((xdf,ydf)),max((xdl,ydl))-1,-1):
+                a=0
+                b=0
+                for l in range(TL):
+                    if(board[i-k+l][j-k+l]==1):
+                        a+=1
+                    if(board[i-k+l][j-k+l]==2):
+                        b+=1
+                if(a==0):
+                    maks=max((maks,v[b]))
+                if(b==0):
+                    mini=max((mini,v[a]))
+            for k in range(min((xdf,TL-ydl-1)),max((xdl,TL-ydf-1)),-1):
+                a=0
+                b=0
+                for l in range(TL):
+                    if(board[i-k+l][j+k-l]==1):
+                        a+=1
+                    if(board[i-k+l][j+k-l]==2):
+                        b+=1
+                if(a==0):
+                    maks=max((maks,v[b]))
+                if(b==0):
+                    mini=max((mini,v[a]))
+            points+=maks
+            points-=mini
     return points
