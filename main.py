@@ -71,13 +71,13 @@ def AImove2(win,board,filled,first,second):
     for i in range(COL):
         if(filled[i]==ROW):
             continue
-        ev=draw_circle(win,board,filled,i,2,sim=True)
+        ev=draw_circle(win,board,filled,i,second,sim=True)
         mini=1000000001
         if(win_check(ev[0])==0):
             for j in range(COL):
                 if(ev[1][j]==ROW):
                     continue
-                ev2=draw_circle(win,ev[0],ev[1],j,1,sim=True)
+                ev2=draw_circle(win,ev[0],ev[1],j,first,sim=True)
                 mini=min((mini,evaluate2(ev2[0],first,second)))
         points=mini
         if(points>maks):
@@ -92,6 +92,7 @@ def main():
     game_history = []
     board = []
     filled = []
+    playermoves = []
     for i in range(COL):
         filled.append(0)
 
@@ -110,10 +111,11 @@ def main():
             if(move!=-1):
                 while move < 0 or move >= COL or filled[move] == ROW:
                     move = int(win.getKey()) - 1
+            playermoves.append(move+1)
         if(player1==2):
-            move = AImove1(win,board,filled,1,2)
+            move = AImove1(win,board,filled,2,1)
         if(player1==3):
-            move = AImove2(win,board,filled,1,2)
+            move = AImove2(win,board,filled,2,1)
         draw_circle(win, board, filled, move, 1)
         winner = win_check(board)
         game_history.append(board)
@@ -127,10 +129,11 @@ def main():
             if(move!=-1):
                 while move < 0 or move >= COL or filled[move] == ROW:
                     move = int(win.getKey()) - 1
+            playermoves.append(move+1)
         if(player2==2):
-             move = AImove1(win,board,filled,2,1)
+             move = AImove1(win,board,filled,1,2)
         if(player2==3):
-             move = AImove2(win,board,filled,2,1)
+             move = AImove2(win,board,filled,1,2)
         draw_circle(win, board, filled, move, 2)
         winner = win_check(board)
         game_history.append(board)
@@ -147,5 +150,8 @@ def main():
     t.setSize(30)
     t.setTextColor("blue")
     t.draw(win)
+    if(debug):
+        print("local player moves history:")
+        print(playermoves)
     win.getKey()
 main()

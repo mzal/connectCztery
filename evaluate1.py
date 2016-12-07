@@ -4,9 +4,9 @@ v = [0,1,5,20,1000000000]
 
 def evaluate1(board,first,second):
     win=win_check(board)
-    if(win==2):
+    if(win==second):
         return 9000000000
-    if(win==1):
+    if(win==first):
         return -9000000000
     points = 0
     for i in range(COL):

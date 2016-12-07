@@ -8,8 +8,8 @@ BASE = WIN_Y/18 # Height of the part with numbers
 background_color = "white"
 TL = 4 # Target Length
 debug = True
-player1 = 3
-player2 = 2
+player1 = 2
+player2 = 3
 # 1 - local player
 # 2 - AI_1
 # 3 - AI_2
