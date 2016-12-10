@@ -8,8 +8,12 @@ BASE = WIN_Y/18 # Height of the part with numbers
 background_color = "white"
 TL = 4 # Target Length
 debug = True
-player1 = 2
-player2 = 3
-# 1 - local player
-# 2 - AI_1
-# 3 - AI_2
+player1 = 0
+player2 = 2
+v = [0,1,5,20,1000000000]
+control=(
+    {"manual":True},                            #0
+    {"manual":False,"ev":1,"AI":"2dminimax"},   #1
+    {"manual":False,"ev":2,"AI":"2dminimax"},   #2
+    {"manual":False,"AI":"debug"},              #3
+)
