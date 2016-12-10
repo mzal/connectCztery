@@ -1,7 +1,7 @@
 from win_check import *
 from static_values import *
 
-def evaluate2(board):
+def evaluate1(board, v):
     points = 0
     if(win_check(board)==2):
         points=9000000000
