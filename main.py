@@ -4,7 +4,7 @@ from evaluate1 import *
 from evaluate2 import *
 from static_values import *
 from win_check import *
-import copy
+from board import *
 
 def draw_grid(win):
     win.setBackground(background_color)
@@ -20,125 +20,96 @@ def draw_grid(win):
         u.setTextColor("blue")
         u.draw(win)
 
-def draw_circle(win, board, filled, col_num, player,sim=False):
-    if(sim):
-        t_board=[]
+
+def ev(i,board):
+    if(i==1):
+        return evaluate1(board)
+    if(i==2):
+        return evaluate2(board)
+
+def a(x,y):
+    return x<y
+def b(x,y):
+    return x>y
+
+def move(player,board,win):
+    player-=1
+    if(player==0):
+        ai=player1
+    if(player==1):
+        ai=player2
+    if(debug):
+        print("Player {} moves..".format(player+1))
+    if(control[ai]["manual"]):
+        m=int(win.getKey())-1
+        while(not board.move(m)):
+            pass
+    elif(control[ai]["AI"]=="2dminimax"):
+        best=0
+        if(player==0):
+            ex=-1000000000
+        if(player==1):
+            ex=1000000000
+        newboard=Board(board)
         for i in range(COL):
-            t_board.append(list(board[i]))
-        t_filled=copy.copy(filled)
-        row_num=filled[col_num]
-        t_board[col_num][ROW-row_num-1]=player
-        t_filled[col_num]+=1
-        return (t_board,t_filled)
-    row_num = filled[col_num]
-    board[col_num][ROW - row_num - 1] = player
-    filled[col_num] += 1
-    c = Circle( Point(WIN_X/(2*COL) + col_num*WIN_X/COL, (WIN_Y-BASE)/(2*ROW) + (ROW - row_num - 1)*(WIN_Y-BASE)/ROW), RADIUS )
-    if (player == 1):
-        c.setFill("yellow")
-        c.setOutline("yellow")
-    else:
-        c.setFill("red")
-        c.setOutline("red")
-    c.draw(win)
-    return (board,filled)
-
-def AImove1(win,board,filled,first,second):
-    maks=-9000000001
-    best=0
-    for i in range(COL):
-        if(filled[i]==ROW):
-            continue
-        ev=draw_circle(win,board,filled,i,second,sim=True)
-        mini=1000000001
-        if(win_check(ev[0])==0):
+            if(not newboard.move(i)):
+                continue
+            if(player==0):
+                ex2=1000000000
+            if(player==1):
+                ex2=-1000000000
+            newboard2=Board(newboard)
             for j in range(COL):
-                if(ev[1][j]==ROW):
+                if(not newboard2.move(j)):
                     continue
-                ev2=draw_circle(win,ev[0],ev[1],j,first,sim=True)
-                mini=min((mini,evaluate1(ev2[0],first,second)))
-        points=mini
-        if(points>maks):
-            best=i
-            maks=points
-    if(debug):
-        print("Value of move "+str(best)+" is "+str(maks))
-    return best
+                val=ev(control[ai]["ev"],newboard2)
+                #print("After {} and {} moves, the value is {}".format(i,j,val))
+                if(player==0 and ex2>val):
+                    ex2=val
+                if(player==1 and ex2<val):
+                    ex2=val
+                newboard2=Board(newboard)
+            if(player==0 and ex<ex2):
+                best=i
+                ex=ex2
+            if(player==1 and ex>ex2):
+                best=i
+                ex=ex2
+            newboard=Board(board)
+        board.move(best)
+        print("Value of move {} is {}".format(best,ex))
+    elif(control[ai]["AI"]=="debug"):
+        newboard=Board(board)
+        print("Before:")
+        print(board)
+        newboard.move(0)
+        print("After:")
+        print(board)
+    print(board)
 
-def AImove2(win,board,filled,first,second):
-    maks=-9000000001
-    best=0
-    for i in range(COL):
-        if(filled[i]==ROW):
-            continue
-        ev=draw_circle(win,board,filled,i,second,sim=True)
-        mini=1000000001
-        if(win_check(ev[0])==0):
-            for j in range(COL):
-                if(ev[1][j]==ROW):
-                    continue
-                ev2=draw_circle(win,ev[0],ev[1],j,first,sim=True)
-                mini=min((mini,evaluate2(ev2[0],first,second)))
-        points=mini
-        if(points>maks):
-            best=i
-            maks=points
-    if(debug):
-        print("Value of move "+str(best)+" is "+str(maks))
-    return best
+
+
+
+
 
 def main():
     win = GraphWin(WIN_TITLE, WIN_X, WIN_Y)
     game_history = []
-    board = []
+    board = Board()
     filled = []
     playermoves = []
-    for i in range(COL):
-        filled.append(0)
-
-    for i in range(COL):
-        board.append([])
-        for j in range(ROW):
-            board[i].append(0)
-
     draw_grid(win)
     winner = 0
-    game_history.append(board)
+    game_history.append(Board(board))
     for i in range(int(COL*ROW/2)):
-        #Player 1
-        if(player1==1):
-            move = int(win.getKey()) - 1
-            if(move!=-1):
-                while move < 0 or move >= COL or filled[move] == ROW:
-                    move = int(win.getKey()) - 1
-            playermoves.append(move+1)
-        if(player1==2):
-            move = AImove1(win,board,filled,2,1)
-        if(player1==3):
-            move = AImove2(win,board,filled,2,1)
-        draw_circle(win, board, filled, move, 1)
-        winner = win_check(board)
-        game_history.append(board)
-        if(debug):
-            print(board)
+        move(1,board,win)
+        game_history.append(Board(board))
+        winner=win_check(board)
         if(winner!=0):
             break
-        #Player 2
-        if(player2==1):
-            move = int(win.getKey()) - 1
-            if(move!=-1):
-                while move < 0 or move >= COL or filled[move] == ROW:
-                    move = int(win.getKey()) - 1
-            playermoves.append(move+1)
-        if(player2==2):
-             move = AImove1(win,board,filled,1,2)
-        if(player2==3):
-             move = AImove2(win,board,filled,1,2)
-        draw_circle(win, board, filled, move, 2)
-        winner = win_check(board)
-        game_history.append(board)
-        if(debug):
-            print(board)
+        move(2,board,win)
+        game_history.append(Board(board))
+        winner=win_check(board)
         if(winner!=0):
             break
     if(winner==1):
@@ -151,7 +122,8 @@ def main():
     t.setTextColor("blue")
     t.draw(win)
     if(debug):
-        print("local player moves history:")
-        print(playermoves)
+        print("game history:")
+        for i in game_history:
+            print(i)
     win.getKey()
 main()
