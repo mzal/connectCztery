@@ -1,12 +1,11 @@
 from win_check import *
+from static_values import *
 
-v = [0,1,5,20,1000000000]
-
-def evaluate1(board,first,second):
+def evaluate1(board):
     win=win_check(board)
-    if(win==second):
+    if(win==2):
         return 9000000000
-    if(win==first):
+    if(win==1):
         return -9000000000
     points = 0
     for i in range(COL):
@@ -23,9 +22,9 @@ def evaluate1(board,first,second):
                 a=0
                 b=0
                 for l in range(TL):
-                    if(board[i-k+l][j]==first):
+                    if(board[i-k+l][j]==1):
                         a+=1
-                    if(board[i-k+l][j]==second):
+                    if(board[i-k+l][j]==2):
                         b+=1
                 if(a==0):
                     maks=max((maks,v[b]))
@@ -35,9 +34,9 @@ def evaluate1(board,first,second):
                 a=0
                 b=0
                 for l in range(TL):
-                    if(board[i][j-k+l]==first):
+                    if(board[i][j-k+l]==1):
                         a+=1
-                    if(board[i][j-k+l]==second):
+                    if(board[i][j-k+l]==2):
                         b+=1
                 if(a==0):
                     maks=max((maks,v[b]))
@@ -47,9 +46,9 @@ def evaluate1(board,first,second):
                 a=0
                 b=0
                 for l in range(TL):
-                    if(board[i-k+l][j-k+l]==first):
+                    if(board[i-k+l][j-k+l]==1):
                         a+=1
-                    if(board[i-k+l][j-k+l]==second):
+                    if(board[i-k+l][j-k+l]==2):
                         b+=1
                 if(a==0):
                     maks=max((maks,v[b]))
@@ -59,9 +58,9 @@ def evaluate1(board,first,second):
                 a=0
                 b=0
                 for l in range(TL):
-                    if(board[i-k+l][j+k-l]==first):
+                    if(board[i-k+l][j+k-l]==1):
                         a+=1
-                    if(board[i-k+l][j+k-l]==second):
+                    if(board[i-k+l][j+k-l]==2):
                         b+=1
                 if(a==0):
                     maks=max((maks,v[b]))
@@ -69,4 +68,4 @@ def evaluate1(board,first,second):
                     mini=max((mini,v[a]))
             points+=maks
             points-=mini
-    return points
+    return -points
