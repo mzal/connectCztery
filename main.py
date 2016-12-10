@@ -83,7 +83,8 @@ def move(player,board,win):
                 ex=ex2
             newboard=Board(board)
         board.move(best)
-        print("Value of move {} is {}".format(best,ex))
+        if(debug):
+            print("Value of move {} is {}".format(best,ex))
     elif(control[ai]["AI"]=="debug"):
         newboard=Board(board)
         print("Before:")
@@ -91,20 +92,23 @@ def move(player,board,win):
         newboard.move(0)
         print("After:")
         print(board)
-    print(board)
+    if(debug):
+        print(board)
 
-
-
-
-
-
-def main():
-    win = GraphWin(WIN_TITLE, WIN_X, WIN_Y)
+def main(*args):
+    win=None
+    if(__name__=="__main__"):
+        win = GraphWin(WIN_TITLE, WIN_X, WIN_Y)
+        draw_grid(win)
+    else:
+        global v1
+        global v2
+        v1 = args[0]
+        v2 = args[1]
     game_history = []
     board = Board()
     filled = []
     playermoves = []
-    draw_grid(win)
     winner = 0
     game_history.append(Board(board))
     for i in range(int(COL*ROW/2)):
@@ -118,18 +122,22 @@ def main():
         winner=win_check(board)
         if(winner!=0):
             break
-    if(winner==1):
-        t=Text(Point(WIN_X/2,WIN_Y/2),"Yellow wins ;)")
-    if(winner==2):
-        t=Text(Point(WIN_X/2,WIN_Y/2),"Red wins :C")
-    if(winner==0):
-        t=Text(Point(WIN_X/2,WIN_Y/2),"That's a draw! :O")
-    t.setSize(30)
-    t.setTextColor("blue")
-    t.draw(win)
-    if(debug):
-        print("game history:")
-        for i in game_history:
-            print(i)
-    win.getKey()
-main()
+    if(__name__=="__main__"):
+        if(winner==1):
+            t=Text(Point(WIN_X/2,WIN_Y/2),"Yellow wins ;)")
+        if(winner==2):
+            t=Text(Point(WIN_X/2,WIN_Y/2),"Red wins :C")
+        if(winner==0):
+            t=Text(Point(WIN_X/2,WIN_Y/2),"That's a draw! :O")
+        t.setSize(30)
+        t.setTextColor("blue")
+        t.draw(win)
+        if(debug):
+            print("game history:")
+            for i in game_history:
+                print(i)
+        win.getKey()
+    else:
+        return winner
+if(__name__=="__main__"):
+    main()
