@@ -21,11 +21,17 @@ def draw_grid(win):
         u.draw(win)
 
 
-def ev(i,board):
+def ev(i,board,player):
     if(i==1):
-        return evaluate1(board)
+        if(player==0):
+            return evaluate1(board,v1)
+        if(player==1):
+            return evaluate2(board,v2)
     if(i==2):
-        return evaluate2(board)
+        if(player==0):
+            return evaluate2(board,v1)
+        if(player==1):
+            return evaluate2(board,v2)
 
 def a(x,y):
     return x<y
@@ -62,7 +68,7 @@ def move(player,board,win):
             for j in range(COL):
                 if(not newboard2.move(j)):
                     continue
-                val=ev(control[ai]["ev"],newboard2)
+                val=ev(control[ai]["ev"],newboard2,player)
                 #print("After {} and {} moves, the value is {}".format(i,j,val))
                 if(player==0 and ex2>val):
                     ex2=val
