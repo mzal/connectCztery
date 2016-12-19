@@ -5,20 +5,8 @@ from evaluate2 import *
 from static_values import *
 from win_check import *
 from board import *
+from draw_board import *
 
-def draw_grid(win):
-    win.setBackground(background_color)
-    for i in range(1,COL):
-        l = Line( Point(i*(WIN_X)/COL,0), Point(i*(WIN_X)/COL, WIN_Y))
-        l.draw(win)
-    for i in range(1,ROW+1):
-        l = Line( Point(0, i*(WIN_Y-BASE)/ROW), Point(WIN_X, i*(WIN_Y-BASE)/ROW) )
-        l.draw(win)
-    for i in range(1,COL+1):
-        u=Text(Point(i*WIN_X/COL - WIN_X/(2*COL), WIN_Y-BASE/2),str(i))
-        u.setSize(11)
-        u.setTextColor("blue")
-        u.draw(win)
 
 
 def ev(i,board,player):
@@ -49,7 +37,7 @@ def move(player,board,win):
     if(control[ai]["manual"]):
         m=int(win.getKey())-1
         while(not board.move(m)):
-            pass
+            m=int(win.getKey())-1
     elif(control[ai]["AI"]=="2dminimax"):
         best=0
         if(player==0):
@@ -94,6 +82,8 @@ def move(player,board,win):
         print(board)
     if(debug):
         print(board)
+    if(__name__=="__main__"):
+        draw_board(board,win)
 
 def main(*args):
     win=None
