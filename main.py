@@ -7,7 +7,7 @@ from win_check import *
 from board import *
 from draw_board import *
 
-
+game_history = []
 
 def ev(i,board,player):
     if(i==1):
@@ -30,14 +30,18 @@ def move(player,board,win):
     player-=1
     if(player==0):
         ai=player1
+        opp=player2
     if(player==1):
         ai=player2
+        opp=player1
     if(debug):
         print("Player {} moves..".format(player+1))
     if(control[ai]["manual"]):
         m=int(win.getKey())-1
         while(not board.move(m)):
             m=int(win.getKey())-1
+        if(m==-1):
+            return False
     elif(control[ai]["AI"]=="2dminimax"):
         best=0
         if(player==0):
@@ -84,6 +88,7 @@ def move(player,board,win):
         print(board)
     if(__name__=="__main__"):
         draw_board(board,win)
+    return True
 
 def main(*args):
     win=None
@@ -95,23 +100,36 @@ def main(*args):
         global v2
         v1 = args[0]
         v2 = args[1]
-    game_history = []
     board = Board()
     filled = []
     playermoves = []
     winner = 0
     game_history.append(Board(board))
-    for i in range(int(COL*ROW/2)):
-        move(1,board,win)
+    p=1
+    for i in range(int(COL*ROW)):
+        ai=player1
+        opp=player2
+        if(p==2):
+            ai,opp=opp,ai
+        if(not move(p,board,win)):
+            if(control[opp]["manual"]):
+                board=game_history[-2]
+                game_history.pop(-1)
+                game_history.pop(-1)
+                i-=2
+            else:
+                board=game_history[-3]
+                game_history.pop(-1)
+                game_history.pop(-1)
+                game_history.pop(-1)
+                i-=3
+                p=3-p
+            draw_board(board,win)
         game_history.append(Board(board))
         winner=win_check(board)
         if(winner!=0):
             break
-        move(2,board,win)
-        game_history.append(Board(board))
-        winner=win_check(board)
-        if(winner!=0):
-            break
+        p=3-p
     if(__name__=="__main__"):
         if(winner==1):
             t=Text(Point(WIN_X/2,WIN_Y/2),"Yellow wins ;)")
@@ -126,6 +144,23 @@ def main(*args):
             print("game history:")
             for i in game_history:
                 print(i)
+        filename="games/game"
+        it=0
+        try:
+            while(True):
+                string=filename+str(it)+".txt"
+                file=open(string,mode="r")
+                file.close()
+                it+=1
+        except:
+            pass
+        finally:
+            string=filename+str(it)+".txt"
+            file=open(string,mode="w")
+            for i in game_history:
+                file.write(str(i))
+                file.write("\n")
+            file.close()
         win.getKey()
     else:
         return winner
