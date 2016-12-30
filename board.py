@@ -31,6 +31,10 @@ class Board():
         return self.__str__()
 
     def move(self,index):
+        if(index < -1 or index >= COL):
+            return False
+        if(index==-1):
+            return True
         if(self.filled[index]==ROW):
             return False
         self[index][self.filled[index]]=self.turn
