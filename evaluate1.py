@@ -3,10 +3,10 @@ from static_values import *
 
 def evaluate1(board, v):
     points = 0
-    if(win_check(board)==2):
+    if(win_check(board)==1):
         points=9000000000
         return points
-    if(win_check(board)==1):
+    if(win_check(board)==2):
         points=-9000000000
         return points
     for i in range(COL):
