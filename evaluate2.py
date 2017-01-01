@@ -3,10 +3,10 @@ from static_values import *
 
 def evaluate2(board, v):
     win=win_check(board)
-    if(win==2):
-        return 9000000000
     if(win==1):
-        return -9000000000
+        return 9000000000
+    if(win==2):
+        return -90010000000
     points = 0
     for i in range(COL):
         for j in range(ROW):
